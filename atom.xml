@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-09-12T14:12:45.363Z</updated>
+  <updated>2020-09-17T10:08:06.224Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hexo 指令</title>
+    <link href="http://example.com/2020/09/17/hexo-%E6%8C%87%E4%BB%A4/"/>
+    <id>http://example.com/2020/09/17/hexo-%E6%8C%87%E4%BB%A4/</id>
+    <published>2020-09-17T09:46:42.000Z</published>
+    <updated>2020-09-17T10:08:06.224Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="简写指令"><a href="#简写指令" class="headerlink" title="简写指令:"></a>简写指令:</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hexo n &quot;我的第一篇文章&quot; &#x3D;&#x3D;&#x3D; &#96;hexo new &quot;我的第一篇文章&quot;&#96; &#x3D;&#x3D;&#x3D; &#96;hexo new post &quot;我的第一篇文章&quot;&#96;    </span><br><span class="line"> &#96;hexo p&#96; &#x3D;&#x3D;&#x3D; &#96;hexo publish&#96;</span><br><span class="line"> &#96;hexo g&#96; &#x3D;&#x3D;&#x3D; &#96;hexo generate&#96;  </span><br><span class="line"> &#96;hexo s&#96; &#x3D;&#x3D;&#x3D; &#96;hexo server&#96;     </span><br><span class="line"> &#96;hexo d&#96; &#x3D;&#x3D;&#x3D; &#96;hexo deploy&#96;</span><br><span class="line"> &#96;hexo deploy -g&#96; &#x3D;&#x3D;&#x3D; &#96;hexo deploy --generate&#96;</span><br><span class="line"> &#96;hexo generate -d&#96; &#x3D;&#x3D;&#x3D; &#96;hexo generate --deploy&#96;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;简写指令&quot;&gt;&lt;a href=&quot;#简写指令&quot; class=&quot;headerlink&quot; title=&quot;简写指令:&quot;&gt;&lt;/a&gt;简写指令:&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;</summary>
+      
+    
+    
+    
+    
+    <category term="hexo" scheme="http://example.com/tags/hexo/"/>
+    
+  </entry>
   
   <entry>
     <title>test</title>
