@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-09-17T10:08:06.224Z</updated>
+  <updated>2020-09-18T07:44:08.624Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>垃圾收集器与内存分布策略整理笔记</title>
+    <link href="http://example.com/2020/09/18/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83%E7%AD%96%E7%95%A5%E6%95%B4%E7%90%86%E7%AC%94%E8%AE%B0/"/>
+    <id>http://example.com/2020/09/18/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83%E7%AD%96%E7%95%A5%E6%95%B4%E7%90%86%E7%AC%94%E8%AE%B0/</id>
+    <published>2020-09-18T06:22:10.000Z</published>
+    <updated>2020-09-18T07:44:08.624Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="1-分代收集理论"><a href="#1-分代收集理论" class="headerlink" title="1. 分代收集理论"></a>1. 分代收集理论</h3><h4 id="a-弱分代假说：绝大多数对象都是朝生夕灭的"><a href="#a-弱分代假说：绝大多数对象都是朝生夕灭的" class="headerlink" title=" a. 弱分代假说：绝大多数对象都是朝生夕灭的"></a><code> a. 弱分代假说：绝大多数对象都是朝生夕灭的</code></h4><h4 id="b-强分代假说：熬过越多次垃圾收集过程的对象就越难以消亡"><a href="#b-强分代假说：熬过越多次垃圾收集过程的对象就越难以消亡" class="headerlink" title="b. 强分代假说：熬过越多次垃圾收集过程的对象就越难以消亡"></a><code>b. 强分代假说：熬过越多次垃圾收集过程的对象就越难以消亡</code></h4><h4 id="c-跨代引用假说：跨代引用相对于同代引用来说仅占极少数"><a href="#c-跨代引用假说：跨代引用相对于同代引用来说仅占极少数" class="headerlink" title="c. 跨代引用假说：跨代引用相对于同代引用来说仅占极少数"></a><code>c. 跨代引用假说：跨代引用相对于同代引用来说仅占极少数</code></h4><h3 id="2-分代垃圾收集分类"><a href="#2-分代垃圾收集分类" class="headerlink" title="2. 分代垃圾收集分类"></a>2. 分代垃圾收集分类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">部分收集（Partial GC）：不针对完整的Java堆进行垃圾收集</span><br><span class="line">新生代收集（Minor GC）：目标为新生代</span><br><span class="line">老年代收集（Major GC）：目标为老年代</span><br><span class="line">混合收集（Mixed GC）：收集整个新生代以及部分老年代（仅G1收集器使用）</span><br><span class="line">整堆收集（Full GC）：收集整个Java堆和方法区的垃圾收集</span><br></pre></td></tr></table></figure><h3 id="3-垃圾收集算法"><a href="#3-垃圾收集算法" class="headerlink" title="3. 垃圾收集算法"></a>3. 垃圾收集算法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 标记-清除算法:</span><br><span class="line">   大量标记和清除情况下执行效率低</span><br><span class="line">   清除后内存空间碎片化</span><br><span class="line">2. 标记-复制算法: 将内存划分成两块，将垃圾收集后存活的对象复制到另一块上</span><br><span class="line">   基于弱分代假说，划分新生代空间时不需要按照1：1</span><br><span class="line">   风险规避：逃生门和分配担保机制</span><br><span class="line">3. 标记-整理算法：移动式回收算法</span><br></pre></td></tr></table></figure><h3 id="4-经典垃圾收集器"><a href="#4-经典垃圾收集器" class="headerlink" title="4. 经典垃圾收集器"></a>4. 经典垃圾收集器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">1. Serial&#x2F;Serial Old收集器</span><br><span class="line">新生代采取标记-复制算法，老年代采取标记-整理算法</span><br><span class="line">单线程工作，垃圾收集时必须暂停其他所有工作线程</span><br><span class="line">简单高效，适用于内存资源受限的环境，如客户端模式下的虚拟机</span><br><span class="line"></span><br><span class="line">2. ParNew收集器</span><br><span class="line">Serial的多线程并行版本，与CMS配合工作</span><br><span class="line"></span><br><span class="line">3. Parallel Scavenge收集器</span><br><span class="line">基于标记-复制算法的新生代收集器，目标为达到可控制的吞吐量，而不是缩短停顿时间</span><br><span class="line">尽力保证内存回收花费的时间不超过用户设定值</span><br><span class="line"></span><br><span class="line">4. Parallel Old收集器</span><br><span class="line">Parallel Scavenge的老年代版本</span><br><span class="line">在注重吞吐量或者处理器资源较为稀缺的场合，都可以优先考虑Parallel Scavenge + Parallel Old组合</span><br><span class="line"></span><br><span class="line">5. CMS（Concurrent Mark Sweep）收集器</span><br><span class="line">基于标记-清除算法，以获取最短回收停顿时间为目标</span><br><span class="line">优化：耗时最长的并发标记和并发清除阶段中可以与用户线程一起工作</span><br><span class="line">无法处理浮动垃圾，由于内存回收过程与用户线程并发执行，需要预留足够内存空间提供给用户线程使用，因此不能像其他收集器一样等待到老年代几乎完全被填满了再进行收集；可能会产生大量碎片空间</span><br><span class="line"></span><br><span class="line">6. G1（Garbege First）收集器</span><br><span class="line">采用Mix GC模式：面向堆内存的任何部分来组成回收集，衡量标准卫视属于哪个分代，而是哪块内存中存放的垃圾数量最多，回收受益最大。</span><br><span class="line">把Java堆划分成多个大小相等的独立区域（Region），优先回收垃圾回收价值收益大的Region。</span><br><span class="line">双向卡表结构较为复杂，占用Java堆容量10%~20的额外内存维持工作。</span><br><span class="line">从整体上看基于标记整理算法实现，从局部（两个Region之间）又是基于标记复制算法实现，不产生空间碎片</span><br><span class="line"></span><br></pre></td></tr></table></figure><h3 id="5-低延迟垃圾收集器"><a href="#5-低延迟垃圾收集器" class="headerlink" title="5. 低延迟垃圾收集器"></a>5. 低延迟垃圾收集器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. Shenandoah收集器</span><br><span class="line">支持并发的整理算法</span><br><span class="line">转发指针处理并发问题（用户线程访问与移动对象间的冲突）：在原有对象不就是结构的前面增加一个新的引用字段，在不处于并发移动的状态下，该引用指向对象自己；当对象有一份新的副本时，将转发指针指向新对象。</span><br><span class="line">比较并交换（CAS）解决并发访问正确性</span><br><span class="line"></span><br><span class="line">2. ZGC收集器</span><br><span class="line">基于Region的堆内存布局，不设分代，使用了读屏障、染色之战和内存多重映射等技术来实现可并发的标记-整理算法的，以低延迟为首要目标的垃圾收集器</span><br><span class="line">染色指针：利用系统架构中未利用的地址空间，将标记信息直接记在引用对象的指针。</span><br><span class="line">并发重分配是ZGC的核心阶段，将重分配集中的存活对象复制到新的Region上，并为每个Region维护一个转发表，记录旧对象到新对象的转向关系。如果用户线程并发访问了位于重分配集中的对象，该房为会被预置的内存屏障所截获，然后根据转发表记录将访问转发到新复制的对象上，并同时修正更新该引用的值，使其直接指向新对象，这种行为被称为指针的‘自愈’能力（只有第一次访问就对象会陷入转发）。基于这些特性，并发重映射也不是迫切的任务，可以合并到下一次垃圾收集循环中的并发标记阶段里完成，节省了一次遍历对象图的开销</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;1-分代收集理论&quot;&gt;&lt;a href=&quot;#1-分代收集理论&quot; class=&quot;headerlink&quot; title=&quot;1. 分代收集理论&quot;&gt;&lt;/a&gt;1. 分代收集理论&lt;/h3&gt;&lt;h4 id=&quot;a-弱分代假说：绝大多数对象都是朝生夕灭的&quot;&gt;&lt;a href=&quot;#a-弱分代假</summary>
+      
+    
+    
+    
+    
+    <category term="GC" scheme="http://example.com/tags/GC/"/>
+    
+  </entry>
   
   <entry>
     <title>hexo 指令</title>
@@ -35,29 +57,6 @@
     
     
     <category term="hexo" scheme="http://example.com/tags/hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>test</title>
-    <link href="http://example.com/2020/09/12/test/"/>
-    <id>http://example.com/2020/09/12/test/</id>
-    <published>2020-09-12T14:12:02.000Z</published>
-    <updated>2020-09-12T14:12:45.363Z</updated>
-    
-    <content type="html"><![CDATA[<p>pkm 🐂</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;pkm 🐂&lt;/p&gt;
-</summary>
-      
-    
-    
-    
-    
-    <category term="test" scheme="http://example.com/tags/test/"/>
     
   </entry>
   
